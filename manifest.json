@@ -1,8 +1,8 @@
 {
-	"id": "obsidian-plugin",
-	"name": "Obsidian Plugin",
-	"version": "0.0.0",
-	"minAppVersion": "1.7.2",
-	"description": "Obsidian plugin for personal use.",
-	"isDesktopOnly": true
+  "id": "obsidian-plugin",
+  "name": "Obsidian Plugin",
+  "version": "0.0.0",
+  "minAppVersion": "1.7.2",
+  "description": "Obsidian plugin for personal use.",
+  "isDesktopOnly": true
 }
