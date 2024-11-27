@@ -1,26 +1,19 @@
 {
   "name": "obsidian-plugin",
   "version": "0.0.0",
+  "main": "build/main.js",
   "description": "Obsidian plugin for personal use.",
-  "main": "main.js",
-  "scripts": {
-    "dev": "node esbuild.config.mjs",
-    "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
-    "version": "node version-bump.mjs && git add manifest.json versions.json"
-  },
-  "keywords": [],
-  "author": "",
   "license": "MIT",
+  "scripts": {
+    "dev": "bun esbuild.config.mts",
+    "build": "tsc && bun esbuild.config.mts prod",
+    "version": "bun version-bump.mjs && git add manifest.json versions.json"
+  },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@types/node": "^16.11.6",
-    "builtin-modules": "3.3.0",
-    "esbuild": "0.17.3",
+    "@types/bun": "^1.1.14",
+    "esbuild": "0.24.0",
     "obsidian": "^1.7.2",
-    "tslib": "2.4.0",
-    "typescript": "4.7.4"
-  },
-  "volta": {
-    "node": "20.18.1"
+    "typescript": "5.7.2"
   }
 }

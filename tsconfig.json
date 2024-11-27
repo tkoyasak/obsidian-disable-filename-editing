@@ -4,14 +4,16 @@
     "inlineSourceMap": true,
     "inlineSources": true,
     "module": "ESNext",
-    "target": "ES6",
+    "target": "ESNext",
     "allowJs": true,
     "noImplicitAny": true,
     "moduleResolution": "node",
-    "importHelpers": true,
     "isolatedModules": true,
     "strict": true,
-    "lib": ["DOM", "ES5", "ES6", "ES7"]
+    "lib": ["ESNext", "DOM"],
+    "noEmit": true,
+    "skipLibCheck": true,
+    "noFallthroughCasesInSwitch": true
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts", "**/*.mts"]
 }
