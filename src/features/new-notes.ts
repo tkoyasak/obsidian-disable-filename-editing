@@ -36,20 +36,11 @@ export class NewNotes {
       return
     }
 
-    const file = await this.app.vault.create(path, '')
-    const date = moment.unix(file.stat.ctime).format('YYYY-MM-DD')
-
-    await this.app.vault.modify(
-      file,
-      `---
-id: ${id}
-created_at: ${date}
-modified_at: ${date}
-title: Untitled
-tags: []
----
-
-`,
+    const file = await this.app.vault.create(
+      path,
+      this.plugin.settings.uidType !== 'diary'
+        ? uniqueEntry(id)
+        : diaryEntry(id),
     )
 
     await this.app.workspace.getLeaf().openFile(file)
@@ -59,10 +50,48 @@ tags: []
 export const UID_CATALOG = {
   ulid,
   uuid,
+  diary: () => moment().format('YYYYMM'),
 } as const
 
 type UIDType = keyof typeof UID_CATALOG
 
-export function generateUID(type: string): string {
+function generateUID(type: string): string {
   return UID_CATALOG[type as UIDType]()
+}
+
+const DOW = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const
+
+function uniqueEntry(id: string): string {
+  return `---
+id: ${id}
+created_at:
+modified_at:
+title: Untitled
+tags: []
+---
+
+`
+}
+
+function diaryEntry(id: string): string {
+  let content = `---
+created_at:
+modified_at:
+---
+
+`
+  const m = moment(id, 'YYYYMM')
+  const n = m.daysInMonth()
+  let w = Number.parseInt(m.format('d'), 10)
+  for (let i = 1; i <= n; i++) {
+    const dd = i.toString().padStart(2, '0')
+    const ddd = DOW[w]
+    content += `###### ${id}${dd}${ddd}
+
+
+
+`
+    w = (w + 1) % 7
+  }
+  return content
 }
