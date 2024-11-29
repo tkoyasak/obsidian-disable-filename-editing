@@ -1,13 +1,14 @@
-import { type App, PluginSettingTab, Setting } from 'obsidian'
+import { PluginSettingTab, Setting } from 'obsidian'
 import { UID_CATALOG } from '../features/new-notes'
 import type ObsidianPlugin from '../main'
+import type { Settings } from '../settings'
 
 export class SettingTab extends PluginSettingTab {
   constructor(
-    public readonly app: App,
     private readonly plugin: ObsidianPlugin,
+    private readonly settings: Settings,
   ) {
-    super(app, plugin)
+    super(plugin.app, plugin)
   }
 
   display(): void {
@@ -15,6 +16,16 @@ export class SettingTab extends PluginSettingTab {
     containerEl.empty()
 
     containerEl.createEl('h2', { text: 'Settings' })
+
+    new Setting(containerEl)
+      .setName('Folder to create new notes in')
+      .setDesc(
+        'New notes placed in this folder. Check it in `Files and links` tab.',
+      )
+      .addDropdown((c) => {
+        const { path } = this.app.fileManager.getNewFileParent('')
+        c.setDisabled(true).addOption('default', path)
+      })
 
     new Setting(containerEl)
       .setName('Unique identifier type')
@@ -29,26 +40,10 @@ export class SettingTab extends PluginSettingTab {
             {} as Record<string, string>,
           ),
         )
-          .setValue(this.plugin.settings.uidType)
+          .setValue(this.settings.uidType)
           .onChange(async (v) => {
-            this.plugin.settings.uidType = v
+            this.settings.uidType = v
             await this.plugin.saveSettings()
-          })
-      })
-
-    new Setting(containerEl)
-      .setName('Override folder to create new notes in')
-      .setDesc(
-        'Use a different folder to create new notes in than the default one.',
-      )
-      .addSearch((c) => {
-        // TODO: folder path suggestion
-        const { path } = this.app.fileManager.getNewFileParent('')
-        c.setPlaceholder(`Default: ${path}`)
-          .setValue(this.plugin.settings.newNoteFolder)
-          .onChange((v) => {
-            this.plugin.settings.newNoteFolder = v
-            this.plugin.saveSettings()
           })
       })
   }

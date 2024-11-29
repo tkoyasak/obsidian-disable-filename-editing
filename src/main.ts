@@ -10,10 +10,10 @@ export default class ObsidianPlugin extends Plugin {
   public async onload(): Promise<void> {
     this.settings = await this.loadSettings()
 
-    this.newNotes = new NewNotes(this.app, this)
+    this.newNotes = new NewNotes(this, this.app)
     this.newNotes.registerCommands()
 
-    this.addSettingTab(new SettingTab(this.app, this))
+    this.addSettingTab(new SettingTab(this, this.settings))
   }
 
   public async onunload(): Promise<void> {
@@ -23,7 +23,6 @@ export default class ObsidianPlugin extends Plugin {
   public async loadSettings(): Promise<Settings> {
     const defaultSettings = {
       uidType: 'ulid',
-      newNoteFolder: this.app.fileManager.getNewFileParent('').path,
     } as const satisfies Settings
 
     return Object.assign(defaultSettings, await this.loadData())

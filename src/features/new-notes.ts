@@ -5,8 +5,8 @@ import type ObsidianPlugin from '../main'
 
 export class NewNotes {
   constructor(
-    private readonly app: App,
     private readonly plugin: ObsidianPlugin,
+    private readonly app: App,
   ) {}
 
   public async registerCommands(): Promise<void> {
@@ -23,30 +23,26 @@ export class NewNotes {
     this.plugin.removeCommand('create-new-note')
   }
 
+  /**
+   * Create a new note with a unique id.
+   */
   private async createNewNote(): Promise<void> {
-    const { uidType, newNoteFolder } = this.plugin.settings
-    const normalizedPath = normalizePath(newNoteFolder)
+    const id = generateUID(this.plugin.settings.uidType)
+    const folder = this.app.fileManager.getNewFileParent('').path
+    const path = normalizePath(`${folder}/${id}.md`)
 
-    if (!this.app.vault.getFileByPath(normalizedPath)) {
-      new Notice("Error: Folder doesn't exist. Please check the settings.")
-      return
-    }
-
-    const uid = generateUID(uidType)
-    const newNotePath = `${normalizedPath}/${uid}.md`
-
-    if (this.app.vault.getFileByPath(newNotePath)) {
+    if (this.app.vault.getFileByPath(path)) {
       new Notice('Error: Generated id collision. Please try again.')
       return
     }
 
-    const file = await this.app.vault.create(newNotePath, '')
+    const file = await this.app.vault.create(path, '')
     const date = moment.unix(file.stat.ctime).format('YYYY-MM-DD')
 
     await this.app.vault.modify(
       file,
       `---
-id: ${uid}
+id: ${id}
 created_at: ${date}
 modified_at: ${date}
 title: Untitled
