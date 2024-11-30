@@ -5,9 +5,11 @@
   "description": "Obsidian plugin for personal use.",
   "license": "MIT",
   "scripts": {
-    "dev": "bun esbuild.config.mts",
-    "build": "tsc && bun esbuild.config.mts prod",
-    "version": "bun version-bump.mjs && git add manifest.json versions.json"
+    "dev": "bun scripts/esbuild.config.mts",
+    "build": "tsc && bun scripts/esbuild.config.mts prod",
+    "version": "bun scripts/version-bump.mjs && git add manifest.json versions.json",
+    "format": "biome format --write",
+    "lint": "biome lint"
   },
   "dependencies": {
     "ulid": "^2.3.0",
@@ -16,7 +18,7 @@
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@types/bun": "^1.1.14",
-    "esbuild": "0.24.0",
+    "esbuild": "^0.24.0",
     "obsidian": "^1.7.2",
     "typescript": "5.7.2"
   }

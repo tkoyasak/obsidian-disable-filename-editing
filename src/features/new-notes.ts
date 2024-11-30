@@ -59,8 +59,6 @@ function generateUID(type: string): string {
   return UID_CATALOG[type as UIDType]()
 }
 
-const DOW = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const
-
 function uniqueEntry(id: string): string {
   return `---
 id: ${id}
@@ -73,12 +71,14 @@ tags: []
 `
 }
 
+const DOW = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const
+
 function diaryEntry(id: string): string {
   let content = `---
+id: ${id}
 created_at:
 modified_at:
 ---
-
 `
   const m = moment(id, 'YYYYMM')
   const n = m.daysInMonth()
@@ -86,8 +86,8 @@ modified_at:
   for (let i = 1; i <= n; i++) {
     const dd = i.toString().padStart(2, '0')
     const ddd = DOW[w]
-    content += `###### ${id}${dd}${ddd}
-
+    content += `
+###### ${id}${dd}${ddd}
 
 
 `
