@@ -1,7 +1,7 @@
-import { type App, Notice, moment, normalizePath } from 'obsidian'
+import { type App, moment, normalizePath, Notice } from 'obsidian'
 import { ulid } from 'ulid'
 import { v7 as uuid } from 'uuid'
-import type ObsidianPlugin from '../main'
+import type ObsidianPlugin from '../main.ts'
 
 export class NewNotes {
   constructor(
@@ -9,7 +9,7 @@ export class NewNotes {
     private readonly app: App,
   ) {}
 
-  public async registerCommands(): Promise<void> {
+  public registerCommands(): void {
     this.plugin.addCommand({
       id: 'create-new-note',
       name: 'Create new note',

@@ -1,7 +1,7 @@
 import { PluginSettingTab, Setting } from 'obsidian'
-import { UID_CATALOG } from '../features/new-notes'
-import type ObsidianPlugin from '../main'
-import type { Settings } from '../settings'
+import { UID_CATALOG } from '../features/new-notes.ts'
+import type ObsidianPlugin from '../main.ts'
+import type { Settings } from '../settings.ts'
 
 export class SettingTab extends PluginSettingTab {
   constructor(

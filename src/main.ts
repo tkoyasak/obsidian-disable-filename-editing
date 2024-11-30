@@ -1,13 +1,13 @@
 import { Plugin } from 'obsidian'
-import { NewNotes } from './features/new-notes'
-import type { Settings } from './settings'
-import { SettingTab } from './ui/setting-tab'
+import { NewNotes } from './features/new-notes.ts'
+import type { Settings } from './settings.ts'
+import { SettingTab } from './ui/setting-tab.ts'
 
 export default class ObsidianPlugin extends Plugin {
   settings!: Settings
   newNotes!: NewNotes
 
-  public async onload(): Promise<void> {
+  public override async onload(): Promise<void> {
     this.settings = await this.loadSettings()
 
     this.newNotes = new NewNotes(this, this.app)
@@ -16,7 +16,7 @@ export default class ObsidianPlugin extends Plugin {
     this.addSettingTab(new SettingTab(this, this.settings))
   }
 
-  public async onunload(): Promise<void> {
+  public override onunload(): void {
     this.newNotes.unregisterCommands()
   }
 

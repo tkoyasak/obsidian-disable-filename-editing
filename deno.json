@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "deno.window",
+      "esnext",
+      "dom"
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "imports": {
+    "esbuild": "npm:esbuild@^0.24.0",
+    "obsidian": "npm:obsidian@^1.7.2",
+    "ulid": "npm:ulid@^2.3.0",
+    "uuid": "npm:uuid@^11.0.3"
+  },
+  "nodeModulesDir": "auto",
+  "tasks": {
+    "dev": "deno -A scripts/esbuild.config.mts",
+    "build": "deno -A scripts/esbuild.config.mts prod"
+  },
+  "fmt": {
+    "indentWidth": 2,
+    "semiColons": false,
+    "singleQuote": true,
+    "useTabs": false
+  }
+}
