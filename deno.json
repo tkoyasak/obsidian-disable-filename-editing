@@ -18,8 +18,8 @@
   },
   "nodeModulesDir": "auto",
   "tasks": {
-    "dev": "deno -A scripts/esbuild.config.mts",
-    "build": "deno -A scripts/esbuild.config.mts prod"
+    "dev": "deno --allow-env --allow-read --allow-run scripts/esbuild.config.mts",
+    "build": "deno --allow-env --allow-read --allow-run scripts/esbuild.config.mts prod"
   },
   "fmt": {
     "indentWidth": 2,

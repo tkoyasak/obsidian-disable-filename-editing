@@ -1,6 +1,6 @@
 import { Plugin } from 'obsidian'
 import { NewNotes } from './features/new-notes.ts'
-import type { Settings } from './settings.ts'
+import { DEFAULT_SETTINGS, type Settings } from './settings.ts'
 import { SettingTab } from './ui/setting-tab.ts'
 
 export default class ObsidianPlugin extends Plugin {
@@ -21,11 +21,7 @@ export default class ObsidianPlugin extends Plugin {
   }
 
   public async loadSettings(): Promise<Settings> {
-    const defaultSettings = {
-      uidType: 'ulid',
-    } as const satisfies Settings
-
-    return Object.assign(defaultSettings, await this.loadData())
+    return Object.assign({}, DEFAULT_SETTINGS, await this.loadData())
   }
 
   public async saveSettings(): Promise<void> {
