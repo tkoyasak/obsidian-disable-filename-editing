@@ -10,14 +10,23 @@ export default class ObsidianPlugin extends Plugin {
   public override async onload(): Promise<void> {
     this.settings = await this.loadSettings()
 
-    this.newNotes = new NewNotes(this, this.app)
-    this.newNotes.registerCommands()
+    this.newNotes = new NewNotes(this.app, this.settings)
+    this.addCommand({
+      id: 'create-new-note',
+      name: 'Create New Note',
+      callback: async () => {
+        await this.newNotes.createNewNote()
+      },
+    })
 
     this.addSettingTab(new SettingTab(this, this.settings))
   }
 
   public override onunload(): void {
-    this.newNotes.unregisterCommands()
+    /**
+     * No need to clean up resources that are guaranteed to be removed when your plugin unloads. Use methods like `addCommand` or `registerEvent`.
+     * @see {@link https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines#Clean+up+resources+when+plugin+unloads}
+     */
   }
 
   public async loadSettings(): Promise<Settings> {
