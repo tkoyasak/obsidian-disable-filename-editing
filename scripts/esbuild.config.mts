@@ -1,4 +1,5 @@
 import * as esbuild from 'esbuild'
+import { builtinModules } from 'node:module'
 
 const prod = Deno.args[0] === 'prod'
 const smap = prod ? false : 'inline'
@@ -33,12 +34,14 @@ const context = await esbuild.context({
     '@lezer/common',
     '@lezer/highlight',
     '@lezer/lr',
+    ...builtinModules,
   ],
 })
 
 if (prod) {
   await context.rebuild()
   await context.dispose()
+  Deno.exit(0)
 } else {
   await context.watch()
 }
