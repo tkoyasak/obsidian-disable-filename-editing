@@ -1,5 +1,6 @@
 import { FileView, Plugin, type WorkspaceLeaf } from 'obsidian'
-import { DEFAULT_SETTINGS, type Settings } from './settings.ts'
+import { defaultSettings } from './constants.ts'
+import type { Settings } from './types.ts'
 import { SettingTab } from './ui/setting-tab.ts'
 
 export default class ObsidianPlugin extends Plugin {
@@ -37,7 +38,7 @@ export default class ObsidianPlugin extends Plugin {
   }
 
   public async loadSettings(): Promise<void> {
-    this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData())
+    this.settings = Object.assign({}, defaultSettings, await this.loadData())
   }
 
   public async saveSettings(): Promise<void> {
@@ -45,12 +46,14 @@ export default class ObsidianPlugin extends Plugin {
   }
 
   private setContentEditableFalse(leaf: WorkspaceLeaf): void {
-    const el = leaf.view.containerEl
+    const children = leaf.view.containerEl.children
     const elements = [
-      ...Array.from(el.querySelectorAll('.inline-title')),
-      ...Array.from(el.querySelectorAll('.view-header-title')),
+      // children[0] is view-header, children[1] is view-content
+      children[0].find('.view-header-title'),
+      children[1].find('.inline-title'),
     ]
     for (const el of elements) {
+      if (!el) continue
       el.setAttribute('contenteditable', 'false')
     }
   }

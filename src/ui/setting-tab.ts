@@ -1,6 +1,6 @@
 import { PluginSettingTab, Setting } from 'obsidian'
 import type ObsidianPlugin from '../main.ts'
-import type { Settings } from '../settings.ts'
+import type { Settings } from '../types.ts'
 
 export class SettingTab extends PluginSettingTab {
   constructor(
