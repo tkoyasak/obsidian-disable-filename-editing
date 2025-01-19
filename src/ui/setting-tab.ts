@@ -1,5 +1,4 @@
 import { PluginSettingTab, Setting } from 'obsidian'
-import { UID_CATALOG } from '../features/new-notes.ts'
 import type ObsidianPlugin from '../main.ts'
 import type { Settings } from '../settings.ts'
 
@@ -12,39 +11,14 @@ export class SettingTab extends PluginSettingTab {
   }
 
   display(): void {
-    const { containerEl } = this
-    containerEl.empty()
+    const el = this.containerEl
+    el.empty()
+    el.createEl('h2', { text: 'Settings' })
 
-    containerEl.createEl('h2', { text: 'Settings' })
-
-    new Setting(containerEl)
-      .setName('Folder to create new notes in')
+    new Setting(el)
+      .setName('Disable file name editing')
       .setDesc(
-        'New notes placed in this folder. Check it in `Files and links` tab.',
+        'Disable file name *editing* via inline title or tab title bar (but still show the filename). ',
       )
-      .addDropdown((c) => {
-        const { path } = this.app.fileManager.getNewFileParent('')
-        c.setDisabled(true).addOption('default', path)
-      })
-
-    new Setting(containerEl)
-      .setName('Unique identifier type')
-      .setDesc('Create new notes with this unique identifier type.')
-      .addDropdown((c) => {
-        c.addOptions(
-          Object.keys(UID_CATALOG).reduce(
-            (acc, key) => {
-              acc[key] = key
-              return acc
-            },
-            {} as Record<string, string>,
-          ),
-        )
-          .setValue(this.settings.uidType)
-          .onChange(async (v) => {
-            this.settings.uidType = v
-            await this.plugin.saveSettings()
-          })
-      })
   }
 }

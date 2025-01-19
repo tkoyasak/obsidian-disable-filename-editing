@@ -1,7 +1,4 @@
-export type Settings = {
-  uidType: string
-}
+// biome-ignore lint/complexity/noBannedTypes:
+export type Settings = {}
 
-export const DEFAULT_SETTINGS: Settings = {
-  uidType: 'ulid',
-} as const
+export const DEFAULT_SETTINGS: Settings = {} as const

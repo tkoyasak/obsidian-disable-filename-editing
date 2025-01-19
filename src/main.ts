@@ -1,23 +1,30 @@
-import { Plugin } from 'obsidian'
-import { NewNotes } from './features/new-notes.ts'
+import { FileView, Plugin, type WorkspaceLeaf } from 'obsidian'
 import { DEFAULT_SETTINGS, type Settings } from './settings.ts'
 import { SettingTab } from './ui/setting-tab.ts'
 
 export default class ObsidianPlugin extends Plugin {
   settings!: Settings
-  newNotes!: NewNotes
 
   public override async onload(): Promise<void> {
-    this.settings = await this.loadSettings()
+    await this.loadSettings()
 
-    this.newNotes = new NewNotes(this.app, this.settings)
-    this.addCommand({
-      id: 'create-new-note',
-      name: 'Create New Note',
-      callback: async () => {
-        await this.newNotes.createNewNote()
-      },
+    this.app.workspace.onLayoutReady(() => {
+      this.app.workspace.iterateRootLeaves((leaf) => {
+        if (!(leaf.view instanceof FileView) || !leaf.view.file) return
+        this.setContentEditableFalse(leaf)
+      })
     })
+
+    this.registerEvent(
+      this.app.workspace.on('file-open', (file) => {
+        if (!file) return
+        this.app.workspace.iterateRootLeaves((leaf) => {
+          if (!(leaf.view instanceof FileView) || !leaf.view.file) return
+          if (leaf.view.file.path !== file.path) return
+          this.setContentEditableFalse(leaf)
+        })
+      }),
+    )
 
     this.addSettingTab(new SettingTab(this, this.settings))
   }
@@ -29,11 +36,22 @@ export default class ObsidianPlugin extends Plugin {
      */
   }
 
-  public async loadSettings(): Promise<Settings> {
-    return Object.assign({}, DEFAULT_SETTINGS, await this.loadData())
+  public async loadSettings(): Promise<void> {
+    this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData())
   }
 
   public async saveSettings(): Promise<void> {
     await this.saveData(this.settings)
+  }
+
+  private setContentEditableFalse(leaf: WorkspaceLeaf): void {
+    const el = leaf.view.containerEl
+    const elements = [
+      ...Array.from(el.querySelectorAll('.inline-title')),
+      ...Array.from(el.querySelectorAll('.view-header-title')),
+    ]
+    for (const el of elements) {
+      el.setAttribute('contenteditable', 'false')
+    }
   }
 }
