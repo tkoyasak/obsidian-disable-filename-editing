@@ -1,8 +1,8 @@
 {
-  "id": "obsidian-plugin",
-  "name": "Obsidian Plugin",
+  "id": "disable-filename-editing",
+  "name": "Disable Filename Editing",
   "version": "0.0.0",
-  "minAppVersion": "1.7.2",
-  "description": "Obsidian plugin for personal use.",
+  "minAppVersion": "1.7.7",
+  "description": "Disable filename editing via inline title or tab title bar.",
   "isDesktopOnly": true
 }

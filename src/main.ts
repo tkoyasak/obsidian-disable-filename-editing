@@ -1,4 +1,4 @@
-import { FileView, Plugin, type WorkspaceLeaf } from 'obsidian'
+import { FileView, Plugin } from 'obsidian'
 import { defaultSettings } from './constants.ts'
 import type { Settings } from './types.ts'
 import { SettingTab } from './ui/setting-tab.ts'
@@ -9,25 +9,23 @@ export default class ObsidianPlugin extends Plugin {
   public override async onload(): Promise<void> {
     await this.loadSettings()
 
-    this.app.workspace.onLayoutReady(() => {
-      this.app.workspace.iterateRootLeaves((leaf) => {
-        if (!(leaf.view instanceof FileView) || !leaf.view.file) return
-        this.setContentEditableFalse(leaf)
-      })
-    })
+    this.addSettingTab(new SettingTab(this, this.settings))
 
     this.registerEvent(
-      this.app.workspace.on('file-open', (file) => {
-        if (!file) return
-        this.app.workspace.iterateRootLeaves((leaf) => {
-          if (!(leaf.view instanceof FileView) || !leaf.view.file) return
-          if (leaf.view.file.path !== file.path) return
-          this.setContentEditableFalse(leaf)
-        })
+      this.app.workspace.on('file-open', () => {
+        const view = this.app.workspace.getActiveViewOfType(FileView)
+        if (!view) return
+        this.setContentEditableFalse(view)
       }),
     )
 
-    this.addSettingTab(new SettingTab(this, this.settings))
+    this.app.workspace.onLayoutReady(() => {
+      this.app.workspace.iterateRootLeaves((leaf) => {
+        const view = leaf.view
+        if (!(view instanceof FileView)) return
+        this.setContentEditableFalse(view)
+      })
+    })
   }
 
   public override onunload(): void {
@@ -45,8 +43,8 @@ export default class ObsidianPlugin extends Plugin {
     await this.saveData(this.settings)
   }
 
-  private setContentEditableFalse(leaf: WorkspaceLeaf): void {
-    const children = leaf.view.containerEl.children
+  private setContentEditableFalse(view: FileView): void {
+    const children = view.containerEl.children
     const elements = [
       // children[0] is view-header, children[1] is view-content
       children[0].find('.view-header-title'),

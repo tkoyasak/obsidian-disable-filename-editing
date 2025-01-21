@@ -1,6 +1,6 @@
 {
-  "name": "obsidian-plugin",
-  "description": "Obsidian plugin for personal use.",
+  "name": "obsidian-disable-filename-editing",
+  "description": "Obsidian plugin for disabling filename editing via inline title or tab title bar.",
   "type": "module",
   "main": "dist/main.js",
   "dependencies": {},
