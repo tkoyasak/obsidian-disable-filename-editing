@@ -1,0 +1,15 @@
+{
+  "fmt": {
+    "semiColons": false,
+    "singleQuote": true
+  },
+  "imports": {
+    "@types/node": "npm:@types/node@^20.17.52",
+    "obsidian": "npm:obsidian@^1.8.7",
+    "tsdown": "npm:tsdown@^0.12.4"
+  },
+  "nodeModulesDir": "auto",
+  "tasks": {
+    "build": "tsdown"
+  }
+}

@@ -1,2 +1,2 @@
-// biome-ignore lint/complexity/noBannedTypes:
+// deno-lint-ignore ban-types
 export type Settings = {}
